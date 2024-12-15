@@ -1,12 +1,14 @@
 package com.apexifyconnect.DAO.interfaces;
 
-import com.apexifyconnect.Model.*;
+import com.apexifyconnect.Model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserDAO {
-    public List<User> findUsersByRole(String role);
-
+    List<User> findUsersByRole(String role);
+    Optional<User> findByEmail(String email);
+    User save(User user);
 }

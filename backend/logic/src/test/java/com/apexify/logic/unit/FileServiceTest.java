@@ -39,7 +39,7 @@ public class FileServiceTest {
         String result = fileService.uploadFile(multipartFile);
 
         assertNotNull(result);
-        assertTrue(result.startsWith("/uploads/"));
+        assertTrue(result.startsWith("/Uploads/"));
         assertTrue(result.endsWith("_" + originalFileName));
 
         File uploadedFile = new File("C:/Users/felly/OneDrive/Desktop/VIAUC/BPR/Uploads", result.substring(9));
@@ -77,7 +77,7 @@ public class FileServiceTest {
         String result = fileService.uploadFile(multipartFile);
 
         assertNotNull(result);
-        assertTrue(result.startsWith("/uploads/"));
+        assertTrue(result.startsWith("/Uploads/"));
         assertTrue(result.endsWith("_largefile.txt"));
     }
 

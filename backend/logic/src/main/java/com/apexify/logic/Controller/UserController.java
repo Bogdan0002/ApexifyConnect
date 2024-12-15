@@ -2,6 +2,7 @@ package com.apexify.logic.Controller;
 
 import com.apexify.logic.DTO.*;
 import com.apexify.logic.Service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
 public class UserController {
+
     private final UserService userService;
 
     /**

@@ -7,10 +7,8 @@ import com.apexify.logic.DTO.UserResponseDTO;
 import com.apexify.logic.Service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+/*
 
-/**
- * Controller for handling authentication-related requests.
- */
 
 @RestController
 @RequestMapping("/api/auth")
@@ -47,5 +45,7 @@ public class AuthController {
         UserResponseDTO response = userService.loginCompany(requestDTO);
         return ResponseEntity.ok(response);
     }
-}
 
+
+}
+*/

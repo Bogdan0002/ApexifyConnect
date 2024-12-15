@@ -41,6 +41,6 @@ public class FileService {
             fos.write(file.getBytes());
         }
 
-        return "/uploads/" + fileName;
+        return "/Uploads/" + fileName;
     }
 }

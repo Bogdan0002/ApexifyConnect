@@ -1,30 +1,33 @@
-package com.apexifyconnect.DAO.impl;
+package com.apexifyconnect.DAO;
 
 import com.apexifyconnect.DAO.interfaces.UserDAO;
 import com.apexifyconnect.Model.User;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
+import com.apexifyconnect.Repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
+@Component
 public class UserDAOImpl implements UserDAO {
-    @PersistenceContext
-    private EntityManager entityManager;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<User> findUsersByRole(String role) {
-        String query;
+        // Implement the method to find users by role if needed
+        return null;
+    }
 
-        if (role.equalsIgnoreCase("ContentCreator")) {
-            query = "SELECT u FROM ContentCreator u";
-        } else if (role.equalsIgnoreCase("Company")) {
-            query = "SELECT u FROM Company u";
-        } else {
-            throw new IllegalArgumentException("Invalid role type: " + role);
-        }
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
-        return entityManager.createQuery(query, User.class).getResultList();
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
     }
 }
