@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="com.apexifyconnect.AppTest" time="0.004" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="com.apexifyconnect.AppTest" time="0.003" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="19+36-2238"/>
@@ -20,6 +20,7 @@
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="java.runtime.version" value="19+36-2238"/>
     <property name="os.arch" value="amd64"/>
+    <property name="spring.profiles.active" value="test"/>
     <property name="java.io.tmpdir" value="C:\Users\felly\AppData\Local\Temp\"/>
     <property name="line.separator" value="
 "/>
@@ -46,7 +47,7 @@
     <property name="java.class.path" value="C:\Program Files\Maven\apache-maven-3.8.6\boot\plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="19"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean test -Dspring.profiles.active=test"/>
     <property name="java.home" value="C:\Users\felly\.jdks\openjdk-19"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
@@ -62,5 +63,5 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.apexifyconnect.AppTest" name="testApp" time="0.004"/>
+  <testcase classname="com.apexifyconnect.AppTest" name="testApp" time="0.003"/>
 </testsuite>
