@@ -22,12 +22,12 @@ jobs:
           distribution: 'adopt'
       - name: Build and test backend module
         working-directory: backend
-        run: mvn clean install -Dspring.profiles.active=test
+        run: mvn clean install
 
       - name: Build and test persistence module
         working-directory: backend/persistence
-        run: mvn clean install -Dspring.profiles.active=test
+        run: mvn clean install
 
       - name: Build and test logic module
         working-directory: backend/logic
-        run: mvn clean install -Dspring.profiles.active=test
+        run: mvn clean install
