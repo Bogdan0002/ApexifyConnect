@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class LogicApplicationTests {
 
     @Test
-    void contextLoads() {
+    public void contextLoads() {
+        // This test will fail if the application context cannot start
     }
 
 }
