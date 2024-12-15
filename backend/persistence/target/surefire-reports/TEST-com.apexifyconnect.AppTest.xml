@@ -20,7 +20,6 @@
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="java.runtime.version" value="19+36-2238"/>
     <property name="os.arch" value="amd64"/>
-    <property name="spring.profiles.active" value="test"/>
     <property name="java.io.tmpdir" value="C:\Users\felly\AppData\Local\Temp\"/>
     <property name="line.separator" value="
 "/>
@@ -47,7 +46,7 @@
     <property name="java.class.path" value="C:\Program Files\Maven\apache-maven-3.8.6\boot\plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="19"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean test -Dspring.profiles.active=test"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean test -Ptest"/>
     <property name="java.home" value="C:\Users\felly\.jdks\openjdk-19"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
