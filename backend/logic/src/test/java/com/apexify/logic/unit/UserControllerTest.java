@@ -55,7 +55,7 @@ public class UserControllerTest {
         UserResponseDTO responseDTO = new UserResponseDTO("test@example.com", "Company");
         when(userService.loginCompany(requestDTO)).thenReturn(responseDTO);
 
-        ResponseEntity<UserResponseDTO> response = userController.loginCompany(requestDTO);
+        ResponseEntity<UserResponseDTO> response = (ResponseEntity<UserResponseDTO>) userController.loginCompany(requestDTO);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(responseDTO, response.getBody());
     }
@@ -66,7 +66,7 @@ public class UserControllerTest {
         UserResponseDTO responseDTO = new UserResponseDTO("test@example.com", "Content Creator");
         when(userService.loginContentCreator(requestDTO)).thenReturn(responseDTO);
 
-        ResponseEntity<UserResponseDTO> response = userController.loginContentCreator(requestDTO);
+        ResponseEntity<UserResponseDTO> response = (ResponseEntity<UserResponseDTO>) userController.loginContentCreator(requestDTO);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(responseDTO, response.getBody());
     }

@@ -2,7 +2,9 @@ package com.apexify.logic.Controller;
 
 import com.apexify.logic.DTO.*;
 import com.apexify.logic.Service.UserService;
+import com.apexify.logic.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     /**
      * Constructs a UserController with the specified UserService.
@@ -59,9 +63,14 @@ public class UserController {
      * @return the response entity containing the user response DTO
      */
     @PostMapping("/login/content-creator")
-    public ResponseEntity<UserResponseDTO> loginContentCreator(@RequestBody LoginRequestDTO requestDTO) {
-        UserResponseDTO response = userService.loginContentCreator(requestDTO);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> loginContentCreator(@RequestBody LoginRequestDTO requestDTO) {
+        try {
+            UserResponseDTO response = userService.loginContentCreator(requestDTO);
+            String token = jwtUtil.generateToken(response.getEmail());
+            return ResponseEntity.ok(new JwtResponseDTO(token, response));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
     /**
@@ -71,8 +80,39 @@ public class UserController {
      * @return the response entity containing the user response DTO
      */
     @PostMapping("/login/company")
-    public ResponseEntity<UserResponseDTO> loginCompany(@RequestBody LoginRequestDTO requestDTO) {
-        UserResponseDTO response = userService.loginCompany(requestDTO);
+    public ResponseEntity<?> loginCompany(@RequestBody LoginRequestDTO requestDTO) {
+        try {
+            UserResponseDTO response = userService.loginCompany(requestDTO);
+            String token = jwtUtil.generateToken(response.getEmail());
+            return ResponseEntity.ok(new JwtResponseDTO(token, response));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/profile-picture")
+    public ResponseEntity<?> getProfilePicture(@RequestParam String email) {
+        try {
+            String profilePictureUrl = userService.getProfilePicture(email);
+            return ResponseEntity.ok(profilePictureUrl);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/profile-picture")
+    public ResponseEntity<?> updateProfilePicture(@RequestParam String email, @RequestParam String profilePictureUrl) {
+        try {
+            userService.updateProfilePicture(email, profilePictureUrl);
+            return ResponseEntity.ok("Profile picture updated successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponseDTO> getUserProfile(@RequestHeader("Authorization") String token) {
+        UserResponseDTO response = userService.getUserProfile(token);
         return ResponseEntity.ok(response);
     }
 }

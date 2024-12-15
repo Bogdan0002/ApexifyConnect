@@ -1,128 +1,193 @@
 import { useState } from "react";
-import { uploadProfilePicture, registerContentCreator, registerCompany } from "../api/UserService";
+import { registerContentCreator, registerCompany, uploadProfilePicture } from "../api/UserService";
+import { useNavigate } from "react-router-dom";
+import Button from "./common/Button";
+import { Container, Typography, Box, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent, TextField } from '@mui/material';
+import styles from "./RegistrationForm.module.css";
+
+type FormData = {
+  email: string;
+  password: string;
+  role: "CONTENT_CREATOR" | "COMPANY";
+  bio: string;
+  companyName: string;
+  businessLicense: string;
+  profilePicture: File | null;
+};
 
 const RegistrationForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
     role: "CONTENT_CREATOR",
-    profilePicture: null,
     bio: "",
     companyName: "",
     businessLicense: "",
+    profilePicture: null,
   });
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    if (file && file.size > 2 * 1024 * 1024) {
-      setMessage("File size exceeds 2MB!");
-      return;
-    }
-    if (file && !file.type.startsWith("image/")) {
-      setMessage("Only image files are allowed!");
-      return;
-    }
-    setFormData({ ...formData, profilePicture: file });
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSelectChange = (e: SelectChangeEvent<string>) => {
+    const { value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      role: value as "CONTENT_CREATOR" | "COMPANY",
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData(prev => ({
+      ...prev,
+      profilePicture: file,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     try {
-      // Upload profile picture if present
       let profilePictureUrl = "";
       if (formData.profilePicture) {
-        profilePictureUrl = await uploadProfilePicture(formData.profilePicture as File);
+        profilePictureUrl = await uploadProfilePicture(formData.profilePicture);
       }
 
-      // Register the user based on the role
       if (formData.role === "CONTENT_CREATOR") {
-        const creatorData = {
+        await registerContentCreator({
           email: formData.email,
           password: formData.password,
           bio: formData.bio,
           profilePicture: profilePictureUrl,
-        };
-        await registerContentCreator(creatorData);
-      } else if (formData.role === "COMPANY") {
-        const companyData = {
+        });
+      } else {
+        await registerCompany({
           email: formData.email,
           password: formData.password,
           companyName: formData.companyName,
           businessLicense: formData.businessLicense,
-        };
-        await registerCompany(companyData);
+        });
       }
 
-      setMessage("Registered successfully!");
+      setMessage("Registration successful!");
+      navigate("/login");
     } catch (error: any) {
-      setMessage(error.response?.data?.message || "Registration failed");
+      setMessage(error.message || "Registration failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        placeholder="Email"
-        required
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        required
-        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-      />
-      <select
-        onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-      >
-        <option value="CONTENT_CREATOR">Content Creator</option>
-        <option value="COMPANY">Company</option>
-      </select>
-
-      {formData.role === "CONTENT_CREATOR" && (
-        <>
-          <textarea
-            placeholder="Bio"
-            onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-          />
-          <input type="file" onChange={handleFileChange} />
-        </>
-      )}
-
-      {formData.role === "COMPANY" && (
-        <>
-          <input
-            type="text"
-            placeholder="Company Name"
+    <Container maxWidth="sm">
+      <Box className={styles.registrationForm}>
+        <Typography variant="h4" component="h2" gutterBottom>
+          Register
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            type="email"
+            id="email"
+            name="email"
+            label="Email"
+            value={formData.email}
+            onChange={handleTextChange}
             required
-            onChange={(e) =>
-              setFormData({ ...formData, companyName: e.target.value })
-            }
+            fullWidth
+            margin="normal"
           />
-          <input
-            type="text"
-            placeholder="Business License"
+          <TextField
+            type="password"
+            id="password"
+            name="password"
+            label="Password"
+            value={formData.password}
+            onChange={handleTextChange}
             required
-            onChange={(e) =>
-              setFormData({ ...formData, businessLicense: e.target.value })
-            }
+            fullWidth
+            margin="normal"
           />
-        </>
-      )}
-
-      <button type="submit" disabled={loading}>
-        {loading ? "Registering..." : "Register"}
-      </button>
-      {message && <p>{message}</p>}
-    </form>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="role-label">Role</InputLabel>
+            <Select
+              labelId="role-label"
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleSelectChange}
+              label="Role"
+            >
+              <MenuItem value="CONTENT_CREATOR">Content Creator</MenuItem>
+              <MenuItem value="COMPANY">Company</MenuItem>
+            </Select>
+          </FormControl>
+          {formData.role === "CONTENT_CREATOR" && (
+            <TextField
+              type="text"
+              id="bio"
+              name="bio"
+              label="Bio"
+              value={formData.bio}
+              onChange={handleTextChange}
+              required
+              fullWidth
+              margin="normal"
+            />
+          )}
+          {formData.role === "COMPANY" && (
+            <>
+              <TextField
+                type="text"
+                id="companyName"
+                name="companyName"
+                label="Company Name"
+                value={formData.companyName}
+                onChange={handleTextChange}
+                required
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                type="text"
+                id="businessLicense"
+                name="businessLicense"
+                label="Business License"
+                value={formData.businessLicense}
+                onChange={handleTextChange}
+                required
+                fullWidth
+                margin="normal"
+              />
+            </>
+          )}
+          <TextField
+            type="file"
+            id="profilePicture"
+            name="profilePicture"
+            label="Profile Picture"
+            onChange={handleFileChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+          />
+          <Button type="submit" disabled={loading}>
+            {loading ? "Registering..." : "Register"}
+          </Button>
+          {message && <Typography color="error" className={styles.message}>{message}</Typography>}
+        </form>
+      </Box>
+    </Container>
   );
 };
 
