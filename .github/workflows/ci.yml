@@ -29,6 +29,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Build and test backend module
+        working-directory: backend
+        run: mvn clean install
+
       - name: Build and test persistence layer
         working-directory: backend/persistence
         run: mvn clean install
@@ -36,4 +40,3 @@ jobs:
       - name: Build and test logic layer
         working-directory: backend/logic
         run: mvn clean install
-
