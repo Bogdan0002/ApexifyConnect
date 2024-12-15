@@ -16,6 +16,6 @@ public class LogicApplication {
         SpringApplication.run(LogicApplication.class, args);
     }
 
-}
+} // test
 
 
