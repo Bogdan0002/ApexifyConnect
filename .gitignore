@@ -33,7 +33,6 @@ replay_pid*
 
 # Maven build files
 target/
-*.properties
 
 # Test logs or output
 *.txt
