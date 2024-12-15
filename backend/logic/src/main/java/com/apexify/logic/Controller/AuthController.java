@@ -8,6 +8,10 @@ import com.apexify.logic.Service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller for handling authentication-related requests.
+ */
+
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
@@ -18,6 +22,7 @@ public class AuthController {
     public AuthController(UserService userService) {
         this.userService = userService;
     }
+
 
     @PostMapping("/register/content-creator")
     public ResponseEntity<UserResponseDTO> registerContentCreator(@RequestBody ContentCreatorRequestDTO requestDTO) {

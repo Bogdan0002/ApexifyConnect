@@ -21,7 +21,15 @@ public class FileUploadController {
     @PostMapping("/profile-picture")
     public ResponseEntity<String> uploadProfilePicture(@RequestParam("file") MultipartFile file) {
         try {
-            // Use the FileService to handle the upload
+            if (file == null || file.isEmpty()) {
+                return ResponseEntity.status(500).body("File upload failed: File is empty");
+            }
+
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename != null && originalFilename.endsWith(".exe")) {
+                return ResponseEntity.status(500).body("File upload failed: Unsupported file type");
+            }
+
             String fileUrl = fileService.uploadFile(file);
             return ResponseEntity.ok(fileUrl);
         } catch (Exception e) {

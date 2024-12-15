@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -22,17 +23,24 @@ public class FileService {
         }
     }
 
-    public String uploadFile(MultipartFile file) throws Exception {
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        File targetFile = new File(uploadDir, fileName);
+    public String uploadFile(MultipartFile file) throws IOException {
+        if (file == null) {
+            throw new NullPointerException("File is null");
+        }
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
+        }
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename != null && originalFilename.endsWith(".exe")) {
+            throw new IllegalArgumentException("Unsupported file type");
+        }
 
-        // Create directories if not exist
-        targetFile.getParentFile().mkdirs();
-
-        try (FileOutputStream fos = new FileOutputStream(targetFile)) {
+        String fileName = System.currentTimeMillis() + "_" + originalFilename;
+        File uploadFile = new File(uploadDir, fileName);
+        try (FileOutputStream fos = new FileOutputStream(uploadFile)) {
             fos.write(file.getBytes());
         }
 
-        return "/uploads/" + fileName; // This path should be accessible from your frontend
+        return "/uploads/" + fileName;
     }
 }
