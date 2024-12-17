@@ -24,6 +24,15 @@ interface UserResponseDTO {
   profilePicture?: string;
 }
 
+interface JobPostRequest {
+    title: string;
+    description: string;
+    budget: number;
+    deadline: string; // ISO date format
+    tagNames: string[]; // Tags as an array of strings
+  }
+  
+
 // API for registering a Content Creator
 
 export const registerContentCreator = async (
@@ -102,4 +111,19 @@ export const uploadProfilePicture = async (file: File): Promise<string> => {
   
   export const updateProfilePicture = async (email: string, profilePictureUrl: string): Promise<AxiosResponse<string>> => {
     return axiosInstance.put(`/users/profile-picture?email=${email}&profilePictureUrl=${profilePictureUrl}`);
+  };
+
+  export const JobPostAPI = {
+    createJobPost: (data: JobPostRequest): Promise<AxiosResponse<any>> => 
+      axiosInstance.post('/job-posts/create', data),
+  
+    getAllJobPosts: (): Promise<AxiosResponse<any>> => 
+      axiosInstance.get('/job-posts/all'),
+  };
+  
+  
+  export const ApplicationAPI = {
+    getApplicationsForJob: (jobPostId: number) => axiosInstance.get(`/applications/job/${jobPostId}`),
+    updateApplicationStatus: (id: number, status: string) =>
+      axiosInstance.patch(`/applications/${id}/status`, null, { params: { status } }),
   };

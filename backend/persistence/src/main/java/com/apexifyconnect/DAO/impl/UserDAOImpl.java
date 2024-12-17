@@ -1,4 +1,4 @@
-package com.apexifyconnect.DAO;
+package com.apexifyconnect.DAO.impl;
 
 import com.apexifyconnect.DAO.interfaces.UserDAO;
 import com.apexifyconnect.Model.User;
@@ -17,8 +17,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> findUsersByRole(String role) {
-        // Implement the method to find users by role if needed
-        return null;
+        return userRepository.findByRole(role);
     }
 
     @Override
@@ -30,4 +29,11 @@ public class UserDAOImpl implements UserDAO {
     public User save(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public Optional<User> findById(Long creatorId) {
+        return userRepository.findById(creatorId);
+    }
+
+
 }

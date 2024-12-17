@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "app_users") //
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -21,5 +23,12 @@ public abstract class User {
 
     private String email;
     private String password;
+    @ManyToMany
+    @JoinTable(
+            name = "user_tags",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags; // Association with tags
 }
 

@@ -6,6 +6,7 @@ import com.apexifyconnect.DAO.interfaces.UserDAO;
 import com.apexifyconnect.Model.Company;
 import com.apexifyconnect.Model.ContentCreator;
 import com.apexifyconnect.Model.User;
+import com.apexifyconnect.Repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,4 +140,31 @@ public class UserService {
 
         return userResponseDTO;
     }
+
+    public Company getCompanyByToken(String token) {
+        // Remove "Bearer " prefix from the token
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        // Parse the token
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtUtil.getSecretKey()) // Replace with your actual secret key
+                .parseClaimsJws(token)
+                .getBody();
+
+        // Extract email from claims
+        String email = claims.getSubject();
+
+        // Fetch the Company user from the database
+        Optional<User> userOptional = userDAO.findByEmail(email);
+        if (userOptional.isEmpty() || !(userOptional.get() instanceof Company)) {
+            throw new RuntimeException("User not found or not a company");
+        }
+
+        return (Company) userOptional.get();
+    }
+
+
 }
+

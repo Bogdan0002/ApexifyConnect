@@ -16,10 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig{
+public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -39,22 +40,47 @@ public class SecurityConfig{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                // Disable CSRF
+                .csrf(csrf -> csrf.disable())
+
+                // Configure CORS
+                .cors(cors -> {
+                    cors.configurationSource(request -> {
+                        CorsConfiguration config = new CorsConfiguration();
+                        config.addAllowedOrigin("http://localhost:5173"); // Allow your front-end origin
+                        config.addAllowedMethod("*"); // Allow all HTTP methods
+                        config.addAllowedHeader("*"); // Allow all headers
+                        config.setAllowCredentials(true); // Support cookies or authentication
+                        return config;
+                    });
+                })
+
+                // Authorize HTTP requests
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/**", "/api/uploads/**", "/Uploads/**").permitAll()
+                        // Public endpoints
+                        .requestMatchers("/api/users/**", "/api/uploads/**").permitAll()
+                        // Role-specific access
+                        .requestMatchers("/job-posts/create").hasAuthority("COMPANY")
+                        .requestMatchers("/job-posts/all").hasAnyAuthority("COMPANY", "CONTENT_CREATOR")
+                        // All other requests
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                // Stateless session management (for JWT)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // Add custom filters (e.g., JWT filter)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/api/users/**", "/api/uploads/**");
+        return (web) -> web.ignoring()
+                .requestMatchers("/api/users/**", "/api/uploads/**"); // Publicly accessible endpoints
     }
 }
