@@ -42,6 +42,16 @@ public class JobPostService {
             jobPost.setStatus(JobStatus.OPEN); // Default status
         }
 
+        if (jobPost.getBudget() != null && jobPost.getBudget() < 0) {
+            throw new IllegalArgumentException("Budget cannot be negative");
+        }
+
+        if (jobPost.getDeadline() != null && jobPost.getDeadline().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Deadline must be in the future");
+        }
+
+
+
         // Fetch tags by name or use empty list if tagNames is null
         List<Tag> tags = (tagNames != null) ? tagNames.stream()
                 .map(tagService::findOrCreateTag) // Find or create each tag
