@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Controller for handling user-related requests.
  */
@@ -113,6 +115,12 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<UserResponseDTO> getUserProfile(@RequestHeader("Authorization") String token) {
         UserResponseDTO response = userService.getUserProfile(token);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/profile/creator")
+    public ResponseEntity<ContentCreatorResponseDTO> getCreatorProfile(@RequestHeader("Authorization") String token) {
+        ContentCreatorResponseDTO response = userService.getCreatorProfile(token);
         return ResponseEntity.ok(response);
     }
 }

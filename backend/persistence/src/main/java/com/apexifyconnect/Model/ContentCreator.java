@@ -11,6 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 public class ContentCreator extends User {
+    private String firstName;
+    private String lastName;
     private String profilePicture;
     private String bio;
     private String skills; // Skills or expertise (e.g., "videography, editing, social media")

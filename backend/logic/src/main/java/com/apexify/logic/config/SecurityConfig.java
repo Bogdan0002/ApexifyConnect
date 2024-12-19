@@ -83,4 +83,6 @@ public class SecurityConfig {
         return (web) -> web.ignoring()
                 .requestMatchers("/api/users/**", "/api/uploads/**"); // Publicly accessible endpoints
     }
+
+
 }

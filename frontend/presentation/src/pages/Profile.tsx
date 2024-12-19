@@ -1,95 +1,36 @@
-import { useEffect, useState } from "react";
-import { getUserProfile, getProfilePicture } from "../api/UserService";
-import { 
-  Container, 
-  Typography, 
-  Box, 
-  Avatar, 
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  CircularProgress
-} from '@mui/material';
-import styles from "./Profile.module.css";
-import JobPostForm from "../components/common/JobPostForm";
+// import { useEffect, useState } from "react";
+// import { getUserProfile } from "../api/UserService";
+// import { CircularProgress, Box } from '@mui/material';
+// import CreatorProfile from './CreatorProfile';
+// import CompanyProfile from './CompanyProfile';
 
-interface UserResponseDTO {
-  email: string;
-  role: string;
-  profilePicture?: string;
-}
+// // Router component for handling myPage depending on role. 
 
-const Profile = () => {
-  const [user, setUser] = useState<UserResponseDTO | null>(null);
-  const [openJobPostModal, setOpenJobPostModal] = useState(false);
+// const Profile = () => {
+//   const [userRole, setUserRole] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await getUserProfile();
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      }
-    };
+//   useEffect(() => {
+//     const fetchUserRole = async () => {
+//       try {
+//         const response = await getUserProfile();
+//         setUserRole(response.data.role.toLowerCase());
+//       } catch (error) {
+//         console.error("Error fetching user role:", error);
+//       }
+//     };
 
-    fetchUserProfile();
-  }, []);
+//     fetchUserRole();
+//   }, []);
 
-  const handleOpenJobPostModal = () => setOpenJobPostModal(true);
-  const handleCloseJobPostModal = () => setOpenJobPostModal(false);
+//   if (!userRole) {
+//     return (
+//       <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+//         <CircularProgress />
+//       </Box>
+//     );
+//   }
 
-  if (!user) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
-      </Box>
-    );
-  }
+//   return userRole === "content_creator" ? <CreatorProfile /> : <CompanyProfile />;
+// };
 
-  return (
-    <Container maxWidth="md">
-      <Box className={styles.profile}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Profile
-        </Typography>
-
-        {/* Company Section */}
-        {user.role.toLowerCase() === "company" && (
-          <Box mt={4}>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              onClick={handleOpenJobPostModal}
-            >
-              Create Job Post
-            </Button>
-
-            {/* Job Post Form Modal */}
-            <Dialog open={openJobPostModal} onClose={handleCloseJobPostModal} fullWidth maxWidth="sm">
-              <DialogTitle>Create a New Job Post</DialogTitle>
-              <DialogContent>
-                <JobPostForm />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleCloseJobPostModal} color="secondary">
-                  Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </Box>
-        )}
-
-        {/* User Info */}
-        <Box className={styles.userInfo}>
-          <Typography>Email: {user.email}</Typography>
-          <Typography>Role: {user.role}</Typography>
-        </Box>
-      </Box>
-    </Container>
-  );
-};
-
-export default Profile;
+// export default Profile;

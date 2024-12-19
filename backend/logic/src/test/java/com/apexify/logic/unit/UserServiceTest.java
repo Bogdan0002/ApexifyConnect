@@ -36,7 +36,7 @@ public class UserServiceTest {
 
     @Test
     public void testRegisterContentCreator_EmailAlreadyInUse() {
-        ContentCreatorRequestDTO requestDTO = new ContentCreatorRequestDTO("test@example.com", "password", "ProfilePicture", "Bio");
+        ContentCreatorRequestDTO requestDTO = new ContentCreatorRequestDTO("test@example.com", "password", "ProfilePicture", "Bio", "Bogdan", "Pavliuc");
         when(userDAO.findByEmail(requestDTO.getEmail())).thenReturn(Optional.of(new ContentCreator()));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -84,7 +84,7 @@ public class UserServiceTest {
 
     @Test
     public void testRegisterContentCreator() {
-        ContentCreatorRequestDTO requestDTO = new ContentCreatorRequestDTO("test@example.com", "password", "ProfilePicture", "Bio");
+        ContentCreatorRequestDTO requestDTO = new ContentCreatorRequestDTO("test@example.com", "password", "ProfilePicture", "Bio", "Bogdan", "Pavliuc");
         ContentCreator savedCreator = new ContentCreator();
         savedCreator.setEmail(requestDTO.getEmail());
         when(userDAO.save(any(ContentCreator.class))).thenReturn(savedCreator);

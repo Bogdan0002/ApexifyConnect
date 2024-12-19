@@ -7,6 +7,21 @@ const Navigation = () => {
   const { isLoggedIn, logout, notification, setNotification } = useAuth();
   const navigate = useNavigate();
 
+  const handleProfileClick = () => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userRole = user.userResponse?.role; 
+    console.log('User role:', userRole);
+    
+    if (userRole === 'Content Creator') {
+      console.log('Navigating to creator profile');
+      navigate('/profile/creator');
+    } else if (userRole === 'Company') {
+      console.log('Navigating to company profile');
+      navigate('/profile/company');
+    }
+  };
+  
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -68,11 +83,11 @@ const Navigation = () => {
                     Messages
                   </Button>
                   <Button 
-                    color="inherit"
-                    onClick={() => handleNavigation('/profile')}
-                  >
-                    My Profile
-                  </Button>
+                color="inherit"
+                onClick={handleProfileClick}
+              >
+                My Profile
+              </Button>
                   <Button 
                     color="inherit"
                     onClick={handleLogout}

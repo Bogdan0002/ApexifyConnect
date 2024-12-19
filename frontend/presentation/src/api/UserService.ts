@@ -4,10 +4,12 @@ import axiosInstance from "./axiosInstace";
 const API_BASE_URL = "http://localhost:8080/api/users";
 
 interface ContentCreatorData {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
-  profilePicture?: string; // Optional
-  bio?: string; // Optional
+  profilePicture?: string; 
+  bio?: string; 
 }
 
 interface CompanyData {
@@ -16,13 +18,27 @@ interface CompanyData {
   companyName: string;
   businessLicense: string;
 }
-
 interface UserResponseDTO {
   email: string;
   role: string;
-  token: string;
+}
+
+interface ContentCreatorResponseDTO {
+  email: string;
+  firstName: string;
+  lastName: string;
+  bio: string;
+  role: string;
   profilePicture?: string;
 }
+
+interface CompanyResponseDTO {
+  email: string;
+  companyName: string;
+  businessLicense: string;
+  role: string;
+}
+
 
 interface JobPostRequest {
     title: string;
@@ -37,14 +53,14 @@ interface JobPostRequest {
 
 export const registerContentCreator = async (
     creatorData: ContentCreatorData
-  ): Promise<AxiosResponse<UserResponseDTO>> => {
+  ): Promise<AxiosResponse<ContentCreatorResponseDTO>> => {
     return axios.post("http://localhost:8080/api/users/register/content-creator", creatorData);
   };
 
 // API for registering a Company
 export const registerCompany = async (
   companyData: CompanyData
-): Promise<AxiosResponse<UserResponseDTO>> => {
+): Promise<AxiosResponse<CompanyResponseDTO>> => {
   return axios.post("http://localhost:8080/api/users/register/company", companyData);
 };
 
@@ -103,6 +119,14 @@ export const uploadProfilePicture = async (file: File): Promise<string> => {
 
   export const getUserProfile = async (): Promise<AxiosResponse<UserResponseDTO>> => {
     return axiosInstance.get('/users/profile');
+  };
+
+  export const getCreatorProfile = async (): Promise<AxiosResponse<ContentCreatorResponseDTO>> => {
+    return axiosInstance.get('/users/profile/creator');
+  };
+
+  export const getCompanyProfile = async (): Promise<AxiosResponse<CompanyResponseDTO>> => {
+    return axiosInstance.get('/users/profile/company');
   };
 
   export const getProfilePicture = async (email: string): Promise<AxiosResponse<string>> => {
