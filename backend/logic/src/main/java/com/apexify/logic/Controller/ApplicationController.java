@@ -4,33 +4,30 @@ import com.apexify.logic.Service.ApplicationService;
 import com.apexify.logic.Service.JobPostService;
 import com.apexifyconnect.Model.Application;
 import com.apexifyconnect.Model.ApplicationStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/api/applications")
 public class ApplicationController {
+    @Autowired
+    private ApplicationService applicationService;
 
-    private final ApplicationService applicationService;
-
-    public ApplicationController(ApplicationService applicationService) {
-        this.applicationService = applicationService;
-    }
-
-    @GetMapping("/job/{jobPostId}")
-    public ResponseEntity<List<Application>> getApplicationsForJobPost(@PathVariable Long jobPostId) {
-        List<Application> applications = applicationService.getApplicationsForJob(jobPostId);
-        return ResponseEntity.ok(applications);
-    }
     @PostMapping("/apply")
-    public ResponseEntity<Application> applyToJobPost(@RequestParam Long jobPostId, @RequestParam Long creatorId) {
-        Application application = applicationService.createApplication(jobPostId, creatorId);
-        return ResponseEntity.ok(application);
-    }
-    @PatchMapping("/{applicationId}/status")
-    public ResponseEntity<Application> updateApplicationStatus(@PathVariable Long applicationId, @RequestParam ApplicationStatus status) {
-        Application updatedApplication = applicationService.updateApplicationStatus(applicationId, status);
-        return ResponseEntity.ok(updatedApplication);
+    public ResponseEntity<ApplicationResponseDTO> apply(@RequestBody ApplicationRequestDTO request) {
+        return ResponseEntity.ok(applicationService.createApplication(request));
     }
 
+    @GetMapping("/job/{jobId}")
+    public ResponseEntity<List<ApplicationResponseDTO>> getApplicationsForJob(@PathVariable Long jobId) {
+        return ResponseEntity.ok(applicationService.getApplicationsByJobId(jobId));
+    }
+
+    @GetMapping("/creator")
+    public ResponseEntity<List<ApplicationResponseDTO>> getCreatorApplications() {
+        return ResponseEntity.ok(applicationService.getCurrentCreatorApplications());
+    }
 }
