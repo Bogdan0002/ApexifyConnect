@@ -16,15 +16,17 @@ public class Application {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "job_post_id", nullable = false)
+    @JoinColumn(name = "job_post_id")
     private JobPost jobPost;
 
     @ManyToOne
-    @JoinColumn(name = "creator_id", nullable = false)
+    @JoinColumn(name = "content_creator_id")
     private ContentCreator contentCreator;
 
+    private String coverLetter;
+
     @Enumerated(EnumType.STRING)
-    private ApplicationStatus status; // APPLIED, ACCEPTED, REJECTED
+    private ApplicationStatus status;
 
     private LocalDateTime appliedAt;
     private LocalDateTime updatedAt;

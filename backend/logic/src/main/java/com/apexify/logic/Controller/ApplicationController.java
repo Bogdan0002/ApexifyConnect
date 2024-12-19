@@ -1,10 +1,8 @@
 package com.apexify.logic.Controller;
 
-import com.apexify.logic.Service.ApplicationService;
-import com.apexify.logic.Service.JobPostService;
 import com.apexifyconnect.Model.Application;
 import com.apexifyconnect.Model.ApplicationStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.apexify.logic.Service.ApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,22 +10,33 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/applications")
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
 public class ApplicationController {
-    @Autowired
-    private ApplicationService applicationService;
+    private final ApplicationService applicationService;
+
+    public ApplicationController(ApplicationService applicationService) {
+        this.applicationService = applicationService;
+    }
 
     @PostMapping("/apply")
-    public ResponseEntity<ApplicationResponseDTO> apply(@RequestBody ApplicationRequestDTO request) {
-        return ResponseEntity.ok(applicationService.createApplication(request));
+    public ResponseEntity<Application> apply(
+            @RequestParam Long jobPostId,
+            @RequestParam Long creatorId) {
+        Application application = applicationService.createApplication(jobPostId, creatorId);
+        return ResponseEntity.ok(application);
     }
 
     @GetMapping("/job/{jobId}")
-    public ResponseEntity<List<ApplicationResponseDTO>> getApplicationsForJob(@PathVariable Long jobId) {
-        return ResponseEntity.ok(applicationService.getApplicationsByJobId(jobId));
+    public ResponseEntity<List<Application>> getApplicationsForJob(@PathVariable Long jobId) {
+        List<Application> applications = applicationService.getApplicationsForJob(jobId);
+        return ResponseEntity.ok(applications);
     }
 
-    @GetMapping("/creator")
-    public ResponseEntity<List<ApplicationResponseDTO>> getCreatorApplications() {
-        return ResponseEntity.ok(applicationService.getCurrentCreatorApplications());
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Application> updateStatus(
+            @PathVariable Long id,
+            @RequestParam ApplicationStatus status) {
+        Application application = applicationService.updateApplicationStatus(id, status);
+        return ResponseEntity.ok(application);
     }
 }

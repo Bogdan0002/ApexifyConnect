@@ -12,4 +12,9 @@ import lombok.Setter;
 public class ApplicationRequestDTO {
     private Long jobPostId;
     private String coverLetter;
+
+    public ApplicationRequestDTO(Long jobPostId, String coverLetter) {
+        this.jobPostId = jobPostId;
+        this.coverLetter = coverLetter;
+    }
 }
