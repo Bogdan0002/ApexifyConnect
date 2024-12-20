@@ -81,8 +81,8 @@ public class JobPostController {
     }
 
     @PostMapping("/apply")
-    public ResponseEntity<Application> applyToJobPost(@RequestParam Long jobPostId, @RequestParam Long creatorId) {
-        Application application = applicationService.createApplication(jobPostId, creatorId);
+    public ResponseEntity<Application> applyToJobPost(@RequestParam Long jobPostId, @RequestParam Long creatorId, @RequestParam String coverLetter) {
+        Application application = applicationService.createApplication(jobPostId, creatorId, coverLetter);
         return ResponseEntity.ok(application);
     }
 

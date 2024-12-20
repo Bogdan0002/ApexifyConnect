@@ -63,6 +63,8 @@ public class SecurityConfig {
                         // Role-specific access
                         .requestMatchers("/job-posts/create").hasAuthority("COMPANY")
                         .requestMatchers("/job-posts/all").hasAnyAuthority("COMPANY", "CONTENT_CREATOR")
+                        .requestMatchers("/job-posts/apply").hasAuthority("CONTENT_CREATOR")
+                        .requestMatchers("/applications/**").hasAnyAuthority("CONTENT_CREATOR")
                         // All other requests
                         .anyRequest().authenticated()
                 )

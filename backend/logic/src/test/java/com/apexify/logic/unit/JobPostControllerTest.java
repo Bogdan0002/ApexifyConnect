@@ -127,10 +127,10 @@ class JobPostControllerTest {
         Long jobPostId = 1L;
         Long creatorId = 1L;
         Application application = new Application();
-        when(applicationService.createApplication(jobPostId, creatorId)).thenReturn(application);
+        when(applicationService.createApplication(jobPostId, creatorId, "cover letter")).thenReturn(application);
 
         // Act
-        ResponseEntity<Application> response = jobPostController.applyToJobPost(jobPostId, creatorId);
+        ResponseEntity<Application> response = jobPostController.applyToJobPost(jobPostId, creatorId, "cover letter");
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());

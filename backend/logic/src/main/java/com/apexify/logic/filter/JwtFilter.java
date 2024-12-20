@@ -16,6 +16,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * JWT authentication filter that intercepts HTTP requests to validate JWT tokens.
+ * Extends OncePerRequestFilter to ensure single execution per request.
+ */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -25,6 +29,16 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * Filters incoming requests to validate JWT tokens and set authentication context.
+     * Extracts JWT from Authorization header, validates it, and sets up Spring Security context.
+     *
+     * @param request The HTTP request
+     * @param response The HTTP response
+     * @param chain The filter chain
+     * @throws ServletException if there's a servlet error
+     * @throws IOException if there's an I/O error
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {

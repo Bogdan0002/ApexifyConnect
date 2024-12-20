@@ -137,6 +137,10 @@ export const uploadProfilePicture = async (file: File): Promise<string> => {
     return axiosInstance.put(`/users/profile-picture?email=${email}&profilePictureUrl=${profilePictureUrl}`);
   };
 
+  export const getCompanyJobPosts = async (): Promise<AxiosResponse<any>> => {
+    return axiosInstance.get('/users/profile/company/jobs');
+  };
+
   export const JobPostAPI = {
     createJobPost: (data: JobPostRequest): Promise<AxiosResponse<any>> => 
       axiosInstance.post('/job-posts/create', data),
@@ -144,6 +148,24 @@ export const uploadProfilePicture = async (file: File): Promise<string> => {
     getAllJobPosts: (): Promise<AxiosResponse<any>> => 
       axiosInstance.get('/job-posts/all'),
   };
+
+  export const getCompanyApplications = async (jobPostId: number): Promise<AxiosResponse<any>> => {
+      return axiosInstance.get(`/applications/job/${jobPostId}`);
+    };
+  
+  export const updateApplicationStatus = async (applicationId: string, status: string): Promise<AxiosResponse<any>> => {
+    return axiosInstance.put(`/applications/${applicationId}/status`, { status });
+  };
+  
+  export const getCompanyProjects = async (): Promise<AxiosResponse<any>> => {
+    return axiosInstance.get('/users/profile/company/projects');
+  };
+  
+  export const getCompanyCollaborations = async (): Promise<AxiosResponse<any>> => {
+    return axiosInstance.get('/users/profile/company/collaborations');
+  };
+
+  
   
   
   export const ApplicationAPI = {

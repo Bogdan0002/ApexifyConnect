@@ -9,20 +9,39 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Service class responsible for handling file operations in the ApexifyConnect platform.
+ * Manages file uploads and ensures proper storage in the designated directory.
+ * Mainly used for uploading pictures.
+ */
 @Service
 public class FileService {
 
-    // Define the upload directory
+    /**
+     * The directory path where uploaded files will be stored
+     */
     private final String uploadDir = "C:/Users/felly/OneDrive/Desktop/VIAUC/BPR/Uploads";
 
+    /**
+     * Initializes the FileService and creates the upload directory if it doesn't exist
+     */
     public FileService() {
-        // Ensure the directory exists
         File directory = new File(uploadDir);
         if (!directory.exists()) {
             directory.mkdirs();
         }
     }
 
+    /**
+     * Uploads a file to the designated directory with a unique timestamp-based filename.
+     * Used for uploading pictures
+     *
+     * @param file The MultipartFile to be uploaded
+     * @return The relative path to the uploaded file
+     * @throws IOException if there's an error during file writing
+     * @throws NullPointerException if the file is null
+     * @throws IllegalArgumentException if the file is empty or has an unsupported type
+     */
     public String uploadFile(MultipartFile file) throws IOException {
         if (file == null) {
             throw new NullPointerException("File is null");

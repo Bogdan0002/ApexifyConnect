@@ -1,5 +1,6 @@
 package com.apexify.logic.Controller;
 
+import com.apexify.logic.DTO.ApplicationResponseDTO;
 import com.apexifyconnect.Model.Application;
 import com.apexifyconnect.Model.ApplicationStatus;
 import com.apexify.logic.Service.ApplicationService;
@@ -21,8 +22,9 @@ public class ApplicationController {
     @PostMapping("/apply")
     public ResponseEntity<Application> apply(
             @RequestParam Long jobPostId,
-            @RequestParam Long creatorId) {
-        Application application = applicationService.createApplication(jobPostId, creatorId);
+            @RequestParam Long creatorId,
+            @RequestParam String coverLetter) {
+        Application application = applicationService.createApplication(jobPostId, creatorId, coverLetter);
         return ResponseEntity.ok(application);
     }
 
@@ -32,11 +34,30 @@ public class ApplicationController {
         return ResponseEntity.ok(applications);
     }
 
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<Application> updateStatus(
-            @PathVariable Long id,
-            @RequestParam ApplicationStatus status) {
-        Application application = applicationService.updateApplicationStatus(id, status);
-        return ResponseEntity.ok(application);
+
+    @GetMapping("/creator/{creatorId}/applications")
+    public ResponseEntity<List<ApplicationResponseDTO>> getApplicationsForCreator(@PathVariable Long creatorId) {
+        List<ApplicationResponseDTO> applications = applicationService.getApplicationsForCreator(creatorId);
+        return ResponseEntity.ok(applications);
     }
+
+    @GetMapping("/company/jobpost/{jobPostId}")
+    public ResponseEntity<List<ApplicationResponseDTO>> getApplicationsForJobPost(@PathVariable Long jobPostId) {
+        List<ApplicationResponseDTO> applications = applicationService.getApplicationsForJobPost(jobPostId);
+        return ResponseEntity.ok(applications);
+    }
+
+    @PatchMapping("/{applicationId}/status")
+    public ResponseEntity<ApplicationResponseDTO> updateApplicationStatus(
+            @PathVariable Long applicationId,
+            @RequestParam ApplicationStatus status) {
+        ApplicationResponseDTO updatedApplication = applicationService.updateApplicationStatus(applicationId, status);
+        return ResponseEntity.ok(updatedApplication);
+    }
+
+
+
+
+
+
 }

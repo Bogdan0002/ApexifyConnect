@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCreatorProfile, uploadProfilePicture, updateProfilePicture } from "../api/UserService";
+import axiosInstance from '../api/axiosInstace';
 import {
   Container,
   Typography,
@@ -9,7 +10,8 @@ import {
   Divider,
   Avatar,
   CircularProgress,
-  IconButton
+  IconButton,
+  Chip
 } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import styles from "./Profile.module.css";
@@ -22,23 +24,46 @@ interface CreatorProfileData {
   profilePicture?: string;
 }
 
+interface Application {
+  id: number;
+  jobPostId: number;
+  jobTitle: string;
+  contentCreatorName: string;
+  coverLetter: string | null;
+  status: string;
+  appliedAt: string;
+}
+
+
 const CreatorProfile = () => {
   const [profile, setProfile] = useState<CreatorProfileData | null>(null);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        console.log('Fetching creator profile...');
         const response = await getCreatorProfile();
-        console.log('Profile data received:', response.data);
         setProfile(response.data);
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
     };
     
+    const fetchApplications = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem('user') || '{}');
+        const creatorId = userData.userResponse?.id;
+        const response = await axiosInstance.get(`/applications/creator/${creatorId}/applications`);
+        console.log('Applications data:', response.data);
+        setApplications(response.data);
+      } catch (error) {
+        console.error("Error fetching applications:", error);
+      }
+    };
+
     fetchProfile();
+    fetchApplications();
   }, []);
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,29 +147,35 @@ const CreatorProfile = () => {
                 {profile.bio}
               </Typography>
 
-              <Box className={styles.statsSection}>
-                <Typography variant="h6" gutterBottom>
-                  Portfolio Statistics
+              <Box className={styles.applicationsSection} mt={4}>
+                <Typography variant="h4" gutterBottom>
+                  My Applications
                 </Typography>
                 <Grid container spacing={2}>
-                  <Grid item xs={4}>
-                    <Paper className={styles.statCard}>
-                      <Typography variant="h6">10</Typography>
-                      <Typography variant="body2">Projects</Typography>
-                    </Paper>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Paper className={styles.statCard}>
-                      <Typography variant="h6">95%</Typography>
-                      <Typography variant="body2">Success Rate</Typography>
-                    </Paper>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Paper className={styles.statCard}>
-                      <Typography variant="h6">50+</Typography>
-                      <Typography variant="body2">Connections</Typography>
-                    </Paper>
-                  </Grid>
+                {applications.map((application) => (
+  <Grid item xs={12} key={application.id}>
+    <Paper elevation={2} sx={{ p: 2 }}>
+      <Typography variant="h6" gutterBottom>
+        {application.jobTitle}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" paragraph>
+        Cover Letter: {application.coverLetter || 'No cover letter provided'}
+      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Chip 
+          label={application.status} 
+          color={application.status === 'APPLIED' ? 'info' : 
+                application.status === 'ACCEPTED' ? 'success' : 'error'}
+        />
+        <Typography variant="body2">
+          Applied: {new Date(application.appliedAt).toLocaleDateString()}
+        </Typography>
+      </Box>
+    </Paper>
+  </Grid>
+))}
+
+
                 </Grid>
               </Box>
             </Box>

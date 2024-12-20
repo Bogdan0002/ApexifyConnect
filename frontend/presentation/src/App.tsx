@@ -12,6 +12,9 @@ import CompanyProfile from "./pages/CompanyProfile";
 import CreatorProfile from "./pages/CreatorProfile";
 import { AuthProvider, useAuth } from "./api/AuthContext";
 import RegisterAsChoice from "./components/RegisterAsChoice";
+import ApplicationForm from "./components/ApplicationForm";
+import ApplicationsPage from "./pages/ApplicationsPage";
+import CompanyApplication from "./components/CompanyApplications";
 
 const theme = createTheme({
   palette: {
@@ -58,6 +61,14 @@ function App() {
                 <Route path="/register" element={<RegisterAsChoice />} />
                 <Route path="/login" element={<LoginForm />} />
                 <Route path="/register/company" element={<CompanyRegistrationForm />} />
+                <Route path="/company/applications" element={
+  <ProtectedRoute allowedRole="Company">
+    <CompanyApplication/>
+  </ProtectedRoute>
+} />
+
+                
+     
                 <Route path="/register/creator" element={<CreatorRegistrationForm />} />
                 
                 <Route path="/profile/creator" element={
@@ -65,6 +76,8 @@ function App() {
     <CreatorProfile />
   </ProtectedRoute>
 } />
+
+
 
 <Route path="/profile/company" element={
   <ProtectedRoute allowedRole="Company">
@@ -77,6 +90,12 @@ function App() {
                     <OpportunityBoard />
                   </ProtectedRoute>
                 } />
+
+<Route path="/apply/:jobId" element={
+  <ProtectedRoute allowedRole="Content Creator">
+    <ApplicationForm />
+  </ProtectedRoute>
+} />
 
                 <Route path="/campaign-management" element={
                   <ProtectedRoute>
@@ -97,5 +116,4 @@ function App() {
     </AuthProvider>
   );
 }
-
 export default App;

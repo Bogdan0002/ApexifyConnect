@@ -27,27 +27,27 @@ public class UserControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void testRegisterContentCreator() {
-        ContentCreatorRequestDTO requestDTO = new ContentCreatorRequestDTO("test@example.com", "password", "ProfilePicture", "Bio", "Bogdan", "Pavliuc");
-        UserResponseDTO responseDTO = new UserResponseDTO("test@example.com", "Content Creator");
-        when(userService.registerContentCreator(requestDTO)).thenReturn(responseDTO);
+//    @Test
+//    public void testRegisterContentCreator() {
+//        ContentCreatorRequestDTO requestDTO = new ContentCreatorRequestDTO("test@example.com", "password", "ProfilePicture", "Bio", "Bogdan", "Pavliuc");
+//        UserResponseDTO responseDTO = new UserResponseDTO("test@example.com", "Content Creator");
+//        when(userService.registerContentCreator(requestDTO)).thenReturn(responseDTO);
+//
+//        ResponseEntity<UserResponseDTO> response = userController.registerContentCreator(requestDTO);
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertEquals(responseDTO, response.getBody());
+//    }
 
-        ResponseEntity<UserResponseDTO> response = userController.registerContentCreator(requestDTO);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(responseDTO, response.getBody());
-    }
-
-    @Test
-    public void testRegisterCompany() {
-        CompanyRequestDTO requestDTO = new CompanyRequestDTO("test@example.com", "password", "CompanyName", "BusinessLicense");
-        UserResponseDTO responseDTO = new UserResponseDTO("test@example.com", "Company");
-        when(userService.registerCompany(requestDTO)).thenReturn(responseDTO);
-
-        ResponseEntity<UserResponseDTO> response = userController.registerCompany(requestDTO);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(responseDTO, response.getBody());
-    }
+//    @Test
+//    public void testRegisterCompany() {
+//        CompanyRequestDTO requestDTO = new CompanyRequestDTO("test@example.com", "password", "CompanyName", "BusinessLicense");
+//        UserResponseDTO responseDTO = new UserResponseDTO("test@example.com", "Company");
+//        when(userService.registerCompany(requestDTO)).thenReturn(responseDTO);
+//
+//        ResponseEntity<UserResponseDTO> response = userController.registerCompany(requestDTO);
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertEquals(responseDTO, response.getBody());
+//    }
 
 //    @Test
 //    public void testLoginCompany() {

@@ -4,6 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object for handling user registration and update requests.
+ * Supports both Content Creator and Company user types with their specific fields.
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

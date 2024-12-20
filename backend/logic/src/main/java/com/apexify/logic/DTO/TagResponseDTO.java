@@ -1,5 +1,10 @@
 package com.apexify.logic.DTO;
 
+/**
+ * Data Transfer Object representing tag information in responses.
+ * Used for transferring tag data when displaying or listing tags in the system.
+ */
+
 public class TagResponseDTO {
 
     private Long id;

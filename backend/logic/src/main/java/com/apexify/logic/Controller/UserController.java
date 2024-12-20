@@ -3,6 +3,7 @@ package com.apexify.logic.Controller;
 import com.apexify.logic.DTO.*;
 import com.apexify.logic.Service.UserService;
 import com.apexify.logic.util.JwtUtil;
+import com.apexifyconnect.Model.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,6 +76,19 @@ public class UserController {
         }
     }
 
+    @PutMapping("/profile/company/jobs/{jobPostId}/complete")
+    public ResponseEntity<JobPostResponseDTO> completeJob(@PathVariable Long jobPostId) {
+        JobPostResponseDTO response = userService.completeJob(jobPostId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/profile/company")
+    public ResponseEntity<CompanyResponseDTO> getCompanyProfile(@RequestHeader("Authorization") String token) {
+        CompanyResponseDTO response = userService.getCompanyProfile(token);
+        return ResponseEntity.ok(response);
+    }
+
+
     /**
      * Logs in a company.
      *
@@ -91,6 +105,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
 
     @GetMapping("/profile-picture")
     public ResponseEntity<?> getProfilePicture(@RequestParam String email) {
@@ -123,4 +138,24 @@ public class UserController {
         ContentCreatorResponseDTO response = userService.getCreatorProfile(token);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/profile/company/jobs")
+    public ResponseEntity<List<JobPostResponseDTO>> getCompanyJobPosts(@RequestHeader("Authorization") String token) {
+        List<JobPostResponseDTO> jobPosts = userService.getCompanyJobPosts(token);
+        return ResponseEntity.ok(jobPosts);
+    }
+
+    @GetMapping("/profile/company/collaborations")
+    public ResponseEntity<List<JobPostResponseDTO>> getCompanyCollaborations(@RequestHeader("Authorization") String token) {
+        List<JobPostResponseDTO> collaborations = userService.getCompanyCollaborations(token);
+        return ResponseEntity.ok(collaborations);
+    }
+
+    @GetMapping("/profile/company/projects")
+    public ResponseEntity<List<JobPostResponseDTO>> getCompanyProjects(@RequestHeader("Authorization") String token) {
+        List<JobPostResponseDTO> projects = userService.getCompanyProjects(token);
+        return ResponseEntity.ok(projects);
+    }
+
+
 }

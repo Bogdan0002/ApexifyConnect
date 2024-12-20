@@ -2,6 +2,7 @@ package com.apexifyconnect.DAO.impl;
 
 import com.apexifyconnect.DAO.interfaces.JobPostDAO;
 import com.apexifyconnect.Model.JobPost;
+import com.apexifyconnect.Model.JobStatus;
 import com.apexifyconnect.Repository.JobPostRepository;
 import org.springframework.stereotype.Repository;
 
@@ -36,5 +37,10 @@ public class JobPostDAOImpl implements JobPostDAO {
     public Optional<JobPost> findById(Long id) {
         // Return the result wrapped in Optional provided by the repository
         return jobPostRepository.findById(id);
+    }
+
+    @Override
+    public List<JobPost> findByCompanyIdAndStatus(Long companyId, JobStatus status) {
+        return jobPostRepository.findByCompanyIdAndStatus(companyId, status);
     }
 }
